@@ -1,0 +1,16 @@
+var geojson = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-121.99086461286373, 37.408798455507124]
+            },
+            "properties": {
+                "title": "Apple",
+                "description": "Job number one"
+            }
+        }
+    ]
+};
