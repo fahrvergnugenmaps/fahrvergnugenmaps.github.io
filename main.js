@@ -21,12 +21,24 @@ const geojson = {
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [ -121.94056278133901, 37.47480348449061]
+                "coordinates": [-121.94056278133901, 37.47480348449061]
             },
             "properties": {
             	"type": "Pony",
                 "title": "Pony.ai",
                 "description": "Job number two"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-122.2724378471316, 37.5680079516563]
+            },
+            "properties": {
+            	"type": "Zoox",
+                "title": "Zoox",
+                "description": "Job number three"
             }
         }
     ]
@@ -53,6 +65,8 @@ geojson.features.forEach(function(marker) {
         el.classList.add('apple');
     } else if (marker.properties.type === "Pony") {
         el.classList.add('pony');
+    } else if (marker.properties.type === "Zoox") {
+        el.classList.add('zoox');
     }
 
     // Make a marker for each feature and add to the map
