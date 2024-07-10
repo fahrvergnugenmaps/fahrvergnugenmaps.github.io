@@ -1,4 +1,3 @@
-// Replace 'YOUR_MAPBOX_ACCESS_TOKEN' with your Mapbox access token
 console.log('foo');
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidG9tYXNubjk4IiwiYSI6ImNseHI4MHg4ZzBrdXQyam9tbmR2Y2ZlZHQifQ.naW1BbxBbf20EERFLqREng';
@@ -14,7 +13,7 @@ const geojson = {
             "properties": {
             	"type": "Apple",
                 "title": "Apple",
-                "description": "Job number one"
+                "description": "Performed content analysis, validation, cleansing, and collection. Created and published regularly scheduled and ad hoc reports."
             }
         },
         {
@@ -26,7 +25,7 @@ const geojson = {
             "properties": {
             	"type": "Pony",
                 "title": "Pony.ai",
-                "description": "Job number two"
+                "description": "Created, maintained and reviewed map data to assist functionality of autonomous vehicles. Performed large scale audits of existing maps."
             }
         },
         {
@@ -38,7 +37,31 @@ const geojson = {
             "properties": {
             	"type": "Zoox",
                 "title": "Zoox",
-                "description": "Job number three"
+                "description": "Created, maintained and reviewed map data to assist functionality of autonomous vehicles. Took ownership of map health reports. Created scripts to automate regular tasks and reduce Cartographer burden."
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-122.0528909204977, 37.38741730182734]
+            },
+            "properties": {
+            	"type": "Aurora",
+                "title": "Aurora",
+                "description": "Figuring it out"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-122.05981694194026, 36.99869900860264]
+            },
+            "properties": {
+            	"type": "UCSC",
+                "title": "UCSC",
+                "description": "2016-2020 Environmental Studies BA, GIS Concentration"
             }
         }
     ]
@@ -47,15 +70,14 @@ const geojson = {
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [-121.98685827727454, 37.360250540945366],
-    zoom: 8
+    center: [-121.98322731088342, 37.292166637386245],
+    zoom: 8.5
 });
 
 console.log('Adding markers from GeoJSON data...');
 geojson.features.forEach(function(marker) {
     console.log('Adding marker:', marker);
 
-    // Create a HTML element for each feature
     var el = document.createElement('div');
     el.className = 'marker';
 	console.log('made it')
@@ -67,12 +89,15 @@ geojson.features.forEach(function(marker) {
         el.classList.add('pony');
     } else if (marker.properties.type === "Zoox") {
         el.classList.add('zoox');
+    } else if (marker.properties.type === "Aurora") {
+        el.classList.add('aurora');
+    } else if (marker.properties.type === "UCSC") {
+        el.classList.add('ucsc');
     }
 
-    // Make a marker for each feature and add to the map
     new mapboxgl.Marker(el)
         .setLngLat(marker.geometry.coordinates)
-        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) 
             .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
         .addTo(map);
 });
