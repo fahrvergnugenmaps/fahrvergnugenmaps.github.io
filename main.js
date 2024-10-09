@@ -49,7 +49,7 @@ const geojson = {
             "properties": {
             	"type": "Aurora",
                 "title": "Aurora",
-                "description": "Figuring it out"
+                "description": "Created training maps for on-vehicle map model. Created and reviewed map data to assist functionality of autonomous vehicles."
             }
         },
         {
@@ -62,6 +62,18 @@ const geojson = {
             	"type": "UCSC",
                 "title": "UCSC",
                 "description": "2016-2020 Environmental Studies BA, GIS Concentration"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-122.05705446913795, 36.95975300013402]
+            },
+            "properties": {
+            	"type": "SSRF",
+                "title": "SSRF",
+                "description": "Performed GIS analysis on a parcel map to find usable land for Accessory Dwelling Units. Prepared key reports for investors and stakeholders."
             }
         }
     ]
@@ -93,6 +105,8 @@ geojson.features.forEach(function(marker) {
         el.classList.add('aurora');
     } else if (marker.properties.type === "UCSC") {
         el.classList.add('ucsc');
+    } else if (marker.properties.type === "SSRF") {
+        el.classList.add('ssrf');
     }
 
     new mapboxgl.Marker(el)
