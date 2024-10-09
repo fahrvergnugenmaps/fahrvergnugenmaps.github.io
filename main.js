@@ -72,7 +72,7 @@ const geojson = {
             },
             "properties": {
             	"type": "SSRF",
-                "title": "SSRF",
+                "title": "Sustainable Systems Research Foundation",
                 "description": "Performed GIS analysis on a parcel map to find usable land for Accessory Dwelling Units. Prepared key reports for investors and stakeholders."
             }
         }
