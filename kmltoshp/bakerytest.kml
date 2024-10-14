@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>bakerytest</name>
+    <description/>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>Stella Pastry</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4082842,37.7991752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>El Rico Pan Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8828516,37.3187303,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Mejor Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4191568,37.7521077,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>City Gal Bakes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.407017,37.7195113,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Primrose Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8760446,37.6593482,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>L.H.Bakeshop</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4076433,37.7947201,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Bob's Donut & Pastry Shop]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4211769,37.7918782,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Patisserie Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0189613,37.3219173,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Mara's Italian Pastries]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.409438,37.7996148,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stella Pastry</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4082842,37.7991752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Golden Gate Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4068426,37.7964132,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>City Gal Bakes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.407017,37.7195113,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Little Bee Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4093401,37.7400117,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Patisserie Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0189613,37.3219173,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Mara's Italian Pastries]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.409438,37.7996148,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Mejor Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4191568,37.7521077,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>L.H.Bakeshop</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4076433,37.7947201,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Primrose Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8760446,37.6593482,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Bob's Donut & Pastry Shop]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.4211769,37.7918782,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mexico Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8243489,37.353252,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cocola</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9481602,37.321937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Paris Baguette</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8834358,37.3873078,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Los Tres Hermanos Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.813613,37.3504659,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>RAJARANI Bakery and Restaurant</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.046966,37.3710543,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Alexander's Patisserie]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0789593,37.3935872,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Sonorense Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8817433,37.3194142,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mexicana Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8623709,37.3411674,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mexico Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8596277,37.3506175,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Delizias Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8242501,37.2829775,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cocola</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9481602,37.321937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bay Area Hot Breads</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.028171,37.3634287,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>RAJARANI Bakery and Restaurant</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.046966,37.3710543,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Paris Baguette</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8834358,37.3873078,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Paris Baguette</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9114528,37.4280806,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Sonorense Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8817433,37.3194142,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Safeway</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8980612,37.4350391,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Donut Wheel</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0319181,37.3263809,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Choc Cookies</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9870995,37.352959,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Patisserie Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0189613,37.3219173,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cocola</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9481602,37.321937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Paris Baguette</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8834358,37.3873078,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Sonorense Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8817433,37.3194142,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mexicana Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8623709,37.3411674,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mexico Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8596277,37.3506175,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pink Elephant Bakeries</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8484702,37.3450987,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Basquia Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.020038,37.3569317,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Panapolis mexican bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.888878,37.356803,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Patisserie Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -122.0189613,37.3219173,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Panaderia La Mejor</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8705118,37.3518609,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cocola</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9481602,37.321937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>La Sonorense Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8817433,37.3194142,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Preligen's Artisan Bakery]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9139962,37.2947097,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Butter Cheeni</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9069302,37.2570071,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jens Cakes NOW Custom Cakes</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8875862,37.3372943,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[BiBi Bakery & Cafe]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9746828,37.3200139,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jane Ellen Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9322855,37.2731211,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Greenlee's Bakery]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9113737,37.3316954,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Bijan Bakery & Cafe']]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8888055,37.3324742,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>El Rico Pan Bakery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.8828516,37.3187303,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Gu eum Cake & Bakery]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.996124,37.2919432,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fancy Flavors Bakeshop</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9913259,37.2929366,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Marvel Cake</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9794759,37.2850275,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Panadería La Espiga</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9779596,37.3050732,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Crumbl - Saratoga</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9921615,37.2903072,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Boudin SF</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9937406,37.292374,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Maple Leaf Donuts</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9783398,37.3049112,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>House of Bagels</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9959954,37.2926599,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Baskin-Robbins</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9804117,37.2853095,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Noah's NY Bagels]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -121.9921731,37.2904429,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
