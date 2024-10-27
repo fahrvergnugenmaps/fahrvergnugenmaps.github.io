@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dan Map</title>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+            .marker {
+                background-size: contain;
+                width: 50px;
+                height: 50px;
+                background-size: contain; /* Ensure the image fits within the div */
+                background-repeat: no-repeat; /* Prevent the image from repeating */
+                background-position: center; /* Center the image within the div */
+                border-radius: 0%;
+                cursor: pointer;
+            }
+            .CBaT {
+                background-image: url('cbat.jpg');
+            }
+            .CtE {
+                background-image: url('cte.jpg');
+            }
+            .PL {
+                background-image: url('pl.jpg');
+            }
+            .KL {
+                background-image: url('kl.jpg');
+            }
+            .TRS {
+                background-image: url('trs.jpg');
+            }
+            .A {
+                background-image: url('a.jpg');
+            }
+            .G {
+                background-image: url('g.jpg');
+            }
+            .TAN {
+                background-image: url('tan.jpg');
+            }
+            .EMG {
+                background-image: url('emg.jpg');
+            }
+            .TN {
+                background-image: url('tn.jpg');
+            }
+
+            .title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            z-index: 1;
+        }
+  </style>
+</head>
+</html>
