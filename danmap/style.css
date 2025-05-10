@@ -1,0 +1,60 @@
+body {
+    font-family: 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdeff2; /* Light pink background */
+}
+
+header {
+    background-color: #ff69b4; /* Pink header */
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+header p {
+    margin: 5px 0 0 0;
+    font-size: 18px;
+}
+
+section {
+    background-color: #fff;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    background-color: #ff69b4; /* Pink section headers */
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+footer {
+    background-color: #ff69b4; /* Pink footer */
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
