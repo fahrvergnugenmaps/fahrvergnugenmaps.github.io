@@ -4,78 +4,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidG9tYXNubjk4IiwiYSI6ImNseHI4MHg4ZzBrdXQyam9tb
 const geojson = {
     "type": "FeatureCollection",
     "features": [
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-121.99086461286373, 37.408798455507124]
-            },
-            "properties": {
-            	"type": "a",
-                "title": "a",
-                "description": "Performed content analysis, validation, cleansing, and collection. Created and published regularly scheduled and ad hoc reports."
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-121.94056278133901, 37.47480348449061]
-            },
-            "properties": {
-            	"type": "cbat",
-                "title": "cbat",
-                "description": "Created, maintained and reviewed map data to assist functionality of autonomous vehicles. Performed large scale audits of existing maps."
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-122.2724378471316, 37.5680079516563]
-            },
-            "properties": {
-            	"type": "cte",
-                "title": "cte",
-                "description": "Created, maintained and reviewed map data to assist functionality of autonomous vehicles. Took ownership of map health reports. Created scripts to automate regular tasks and reduce Cartographer burden."
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-122.0528909204977, 37.38741730182734]
-            },
-            "properties": {
-            	"type": "emg",
-                "title": "emg",
-                "description": "Created training maps for on-vehicle map model. Created and reviewed map data to assist functionality of autonomous vehicles."
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-122.05981694194026, 36.99869900860264]
-            },
-            "properties": {
-            	"type": "g",
-                "title": "g",
-                "description": "2016-2020 Environmental Studies BA, GIS Concentration"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-122.05705446913795, 36.95975300013402]
-            },
-            "properties": {
-            	"type": "kl",
-                "title": "kl",
-                "description": "Performed GIS analysis on a parcel map to find usable land for Accessory Dwelling Units. Prepared key reports for investors and stakeholders."
-            }
-        }
+        
     ]
 };
 
