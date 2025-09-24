@@ -17,6 +17,7 @@ def geocode_address(address, mapbox_token):
         
         if data.get("features"):
             # Extract first result's coordinates [longitude, latitude]
+            print(data)
             longitude, latitude = data["features"][0]["center"]
             return {"latitude": latitude, "longitude": longitude}
         else:
@@ -28,7 +29,7 @@ def geocode_address(address, mapbox_token):
 # Example Usage
 if __name__ == "__main__":
     MAPBOX_TOKEN = "pk.eyJ1IjoidG9tYXNubjk4IiwiYSI6ImNtYWhzMHpsdTA2MTUyb3E1dHBzNTJmOGsifQ.4OQZndB_QZgm6ILYTGkiIQ"  # Replace with your token
-    address = "Grove Street at Franklin Street, San Francisco, CA"
+    address = "19th Street & Tennessee Street, San Francisco, CA"
     
     result = geocode_address(address, MAPBOX_TOKEN)
     
