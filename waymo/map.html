@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Location Map</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        #map { 
+            position: absolute; 
+            top: 0; 
+            bottom: 0; 
+            width: 100%; 
+        }
+        .map-overlay {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        #info-panel {
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        #details-panel {
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding: 0;
+            display: none;
+        }
+        .header {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .stats {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .stats p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stats span {
+            font-weight: 600;
+            color: #0066cc;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .csv-input {
+            padding: 10px;
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            background: #f8f9fa;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            color: #495057;
+        }
+        .csv-input:hover {
+            border-color: #0066cc;
+            background: #e7f0ff;
+        }
+        .file-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .file-selector select,
+        .file-selector input {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .details-header {
+            background: #0066cc;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .details-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .details-content {
+            padding: 20px;
+        }
+        .location-info {
+            background: white;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .location-info h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .location-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95);
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0066cc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .marker {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%230066cc" d="M12 0C7.2 0 3 4.2 3 9c0 5.3 9 15 9 15s9-9.7 9-15c0-4.8-4.2-9-9-9zm0 13c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/></svg>');
+            background-size: cover;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        .mapboxgl-popup {
+            max-width: 300px;
+        }
+        .mapboxgl-popup-content {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .mapboxgl-popup-content h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .mapboxgl-popup-content p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .cluster-marker {
+            background: #0066cc;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .cluster-marker:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div id="info-panel" class="map-overlay">
+        <h2 class="header">📍 CSV Location Map</h2>
+        <div class="stats">
+            <p>Total Locations: <span id="total-count">0</span></p>
+            <p>Loaded: <span id="loaded-count">0</span></p>
+            <p>With Coordinates: <span id="coords-count">0</span></p>
+        </div>
+        
+        <div class="file-selector">
+            <label for="csv-file-select">Load CSV from directory:</label>
+            <select id="csv-file-select" onchange="loadCSVFromSelect()">
+                <option value="">Select a CSV file...</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+            <div style="font-size: 12px; color: #666; text-align: center;">
+                OR
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="csv-input" id="csv-drop-area">
+                📁 Drag & drop CSV file or click to upload
+                <input type="file" id="csv-file-upload" accept=".csv" style="display: none;">
+            </div>
+            <button id="refresh-list" onclick="refreshCSVFileList()">🔄 Refresh File List</button>
+            <button id="clear-data" onclick="clearAllData()" disabled>Clear All Data</button>
+            <button id="toggle-clusters" onclick="toggleClusters()">Enable Clustering</button>
+            <button id="fit-bounds" onclick="fitToBounds()" disabled>Fit to All Locations</button>
+        </div>
+        
+        <div style="margin-top: 15px; font-size: 12px; color: #666; line-height: 1.4;">
+            <p><strong>Instructions:</strong></p>
+            <p>1. Place CSV files in the same directory as this HTML file</p>
+            <p>2. Select a file from the dropdown or drag & drop</p>
+            <p>3. Click on any marker to view location details</p>
+            <p>4. Use clustering for better performance with large datasets</p>
+        </div>
+    </div>
+    
+    <div id="details-panel" class="map-overlay">
+        <div class="details-header">
+            <h3>Location Details</h3>
+            <button class="close-btn" onclick="closeDetails()">✕ Close</button>
+        </div>
+        <div class="details-content" id="details-content">
+            <!-- Details will be populated here -->
+        </div>
+    </div>
+    
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Processing CSV data...</p>
+    </div>
+
+    <script>
+        // Replace with your Mapbox access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXVzZXIiLCJhIjoiY2x0b2JjM2xkMDVzYjJqb2I1a25oa3B6NyJ9.dummy_token_placeholder';
+        
+        let map;
+        let markers = [];
+        let clusters = [];
+        let allLocations = [];
+        let useClustering = false;
+        
+        // Initialize the map
+        function initMap() {
+            map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/light-v11',
+                center: [-98.5795, 39.8283], // Center of US
+                zoom: 3,
+                maxZoom: 18
+            });
+            
+            // Add navigation controls
+            map.addControl(new mapboxgl.NavigationControl());
+            
+            // Add geolocate control
+            map.addControl(new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserLocation: true
+            }));
+            
+            // Set up file upload handlers
+            setupFileUpload();
+            
+            // Load available CSV files on start
+            setTimeout(refreshCSVFileList, 500);
+        }
+        
+        function setupFileUpload() {
+            const dropArea = document.getElementById('csv-drop-area');
+            const fileInput = document.getElementById('csv-file-upload');
+            
+            dropArea.addEventListener('click', () => fileInput.click());
+            
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processCSVFile(file);
+                }
+            });
+            
+            // Drag and drop handlers
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#0066cc';
+                dropArea.style.background = '#e7f0ff';
+            });
+            
+            dropArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#dee2e6';
+                dropArea.style.background = '#f8f9fa';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#dee2e6';
+                dropArea.style.background = '#f8f9fa';
+                
+                const file = e.dataTransfer.files[0];
+                if (file && (file.type === 'text/csv' || file.name.endsWith('.csv'))) {
+                    processCSVFile(file);
+                } else {
+                    alert('Please drop a CSV file');
+                }
+            });
+        }
+        
+        async function refreshCSVFileList() {
+            try {
+                // Try to fetch CSV files from the same directory
+                const response = await fetch('./');
+                if (!response.ok) {
+                    console.log('Cannot auto-discover files in this directory');
+                    return;
+                }
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = doc.querySelectorAll('a');
+                
+                const csvFiles = [];
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href.toLowerCase().endsWith('.csv') && !href.startsWith('http')) {
+                        csvFiles.push(href);
+                    }
+                });
+                
+                const select = document.getElementById('csv-file-select');
+                select.innerHTML = '<option value="">Select a CSV file...</option>';
+                
+                if (csvFiles.length > 0) {
+                    csvFiles.forEach(file => {
+                        const option = document.createElement('option');
+                        option.value = file;
+                        option.textContent = file;
+                        select.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No CSV files found in directory';
+                    select.appendChild(option);
+                }
+            } catch (error) {
+                console.log('Error fetching file list:', error);
+                const select = document.getElementById('csv-file-select');
+                select.innerHTML = '<option value="">Unable to list files (CORS restriction)</option>';
+            }
+        }
+        
+        async function loadCSVFromSelect() {
+            const select = document.getElementById('csv-file-select');
+            const filename = select.value;
+            
+            if (!filename) return;
+            
+            showLoading(true);
+            
+            try {
+                // Fetch the CSV file from the same directory
+                const response = await fetch(filename);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load file: ${response.status} ${response.statusText}`);
+                }
+                
+                const csvData = await response.text();
+                parseCSV(csvData);
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+                alert(`Error loading CSV file: ${error.message}\n\nMake sure the file exists in the same directory as this HTML file.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        function processCSVFile(file) {
+            showLoading(true);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csvData = e.target.result;
+                parseCSV(csvData);
+                showLoading(false);
+                
+                // Add to dropdown if not already there
+                const select = document.getElementById('csv-file-select');
+                let found = false;
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === file.name) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found && file.name.endsWith('.csv')) {
+                    const option = document.createElement('option');
+                    option.value = file.name;
+                    option.textContent = file.name;
+                    select.appendChild(option);
+                }
+            };
+            
+            reader.onerror = function() {
+                alert('Error reading file');
+                showLoading(false);
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            if (lines.length === 0) return;
+            
+            // Parse headers
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            // Find column indices
+            const lonIndex = headers.indexOf('longitude');
+            const latIndex = headers.indexOf('latitude');
+            const addressIndex = headers.indexOf('Location Address / Description');
+            const locationIndex = headers.indexOf('Location');
+            const idIndex = headers.indexOf('SGO Report ID');
+            const dateIndex = headers.indexOf('Incident Date');
+            
+            // Also check for alternative column names
+            const altLonIndex = headers.findIndex(h => 
+                h.toLowerCase().includes('long') || h.toLowerCase().includes('lon')
+            );
+            const altLatIndex = headers.findIndex(h => 
+                h.toLowerCase().includes('lat')
+            );
+            
+            const finalLonIndex = lonIndex !== -1 ? lonIndex : altLonIndex;
+            const finalLatIndex = latIndex !== -1 ? latIndex : altLatIndex;
+            
+            if (finalLonIndex === -1 || finalLatIndex === -1) {
+                alert('CSV must contain longitude and latitude columns. Found columns: ' + headers.join(', '));
+                return;
+            }
+            
+            // Clear existing data
+            clearMapData();
+            
+            // Parse data rows
+            const locations = [];
+            let rowCount = 0;
+            let coordCount = 0;
+            
+            // Process in batches to avoid blocking UI
+            const batchSize = 1000;
+            let currentIndex = 1;
+            
+            function processBatch() {
+                const endIndex = Math.min(currentIndex + batchSize, lines.length);
+                
+                for (let i = currentIndex; i < endIndex; i++) {
+                    if (lines[i].trim() === '') continue;
+                    
+                    rowCount++;
+                    const row = parseCSVRow(lines[i]);
+                    
+                    if (row.length >= Math.max(finalLonIndex, finalLatIndex) + 1) {
+                        const lon = parseFloat(row[finalLonIndex]);
+                        const lat = parseFloat(row[finalLatIndex]);
+                        
+                        if (!isNaN(lon) && !isNaN(lat)) {
+                            coordCount++;
+                            const location = {
+                                id: idIndex !== -1 ? row[idIndex] || `location-${i}` : `location-${i}`,
+                                coordinates: [lon, lat],
+                                address: addressIndex !== -1 ? row[addressIndex] : 'No address available',
+                                locationName: locationIndex !== -1 ? row[locationIndex] : 'Unknown location',
+                                date: dateIndex !== -1 ? row[dateIndex] : 'Unknown date',
+                                rawData: row,
+                                headers: headers
+                            };
+                            locations.push(location);
+                        }
+                    }
+                }
+                
+                currentIndex = endIndex;
+                
+                // Update stats
+                updateStats(rowCount, coordCount, locations.length);
+                
+                if (currentIndex < lines.length) {
+                    // Continue processing next batch
+                    setTimeout(processBatch, 0);
+                } else {
+                    // All rows processed
+                    allLocations = locations;
+                    updateStats(rowCount, coordCount, locations.length);
+                    
+                    if (locations.length > 0) {
+                        enableControls();
+                        plotLocations(locations);
+                        fitToBounds();
+                        
+                        // Show success message
+                        showMessage(`Successfully loaded ${locations.length} locations with coordinates`);
+                    } else {
+                        alert('No valid coordinate data found in CSV');
+                    }
+                }
+            }
+            
+            // Start processing
+            processBatch();
+        }
+        
+        function parseCSVRow(row) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < row.length; i++) {
+                const char = row[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+        
+        function plotLocations(locations) {
+            clearMarkers();
+            
+            if (useClustering && locations.length > 100) {
+                createClusters(locations);
+            } else {
+                createMarkers(locations);
+            }
+        }
+        
+        function createMarkers(locations) {
+            markers.forEach(marker => marker.remove());
+            markers = [];
+            
+            locations.forEach(location => {
+                const el = document.createElement('div');
+                el.className = 'marker';
+                el.style.width = '24px';
+                el.style.height = '24px';
+                el.style.cursor = 'pointer';
+                
+                const marker = new mapboxgl.Marker(el)
+                    .setLngLat(location.coordinates)
+                    .addTo(map);
+                
+                // Add click event
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showLocationDetails(location);
+                });
+                
+                // Add popup
+                const popup = new mapboxgl.Popup({
+                    offset: 25,
+                    closeButton: false
+                }).setHTML(`
+                    <h3>${location.locationName}</h3>
+                    <p><strong>Address:</strong> ${location.address}</p>
+                    <p><strong>Date:</strong> ${location.date}</p>
+                    <p><strong>Coordinates:</strong> ${location.coordinates[1].toFixed(6)}, ${location.coordinates[0].toFixed(6)}</p>
+                    <p style="margin-top: 10px; color: #666; font-size: 12px;">Click marker for more details</p>
+                `);
+                
+                marker.setPopup(popup);
+                markers.push(marker);
+            });
+        }
+        
+        function createClusters(locations) {
+            // Simple clustering implementation for performance
+            const clusterDistance = 0.1; // Degrees
+            const clusters = [];
+            
+            locations.forEach(location => {
+                let addedToCluster = false;
+                
+                for (const cluster of clusters) {
+                    const center = cluster.center;
+                    const distance = Math.sqrt(
+                        Math.pow(location.coordinates[0] - center[0], 2) +
+                        Math.pow(location.coordinates[1] - center[1], 2)
+                    );
+                    
+                    if (distance < clusterDistance) {
+                        cluster.locations.push(location);
+                        cluster.center = [
+                            (cluster.center[0] * cluster.locations.length + location.coordinates[0]) / (cluster.locations.length + 1),
+                            (cluster.center[1] * cluster.locations.length + location.coordinates[1]) / (cluster.locations.length + 1)
+                        ];
+                        addedToCluster = true;
+                        break;
+                    }
+                }
+                
+                if (!addedToCluster) {
+                    clusters.push({
+                        center: location.coordinates,
+                        locations: [location]
+                    });
+                }
+            });
+            
+            // Clear existing clusters
+            clusters.forEach(cluster => cluster.marker?.remove());
+            
+            // Create cluster markers
+            clusters.forEach(cluster => {
+                const count = cluster.locations.length;
+                const size = Math.min(40 + Math.sqrt(count) * 5, 100);
+                
+                const el = document.createElement('div');
+                el.className = 'cluster-marker';
+                el.style.width = `${size}px`;
+                el.style.height = `${size}px`;
+                el.style.fontSize = `${Math.min(14 + Math.sqrt(count), 20)}px`;
+                el.innerHTML = count;
+                
+                const marker = new mapboxgl.Marker(el)
+                    .setLngLat(cluster.center)
+                    .addTo(map);
+                
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (count === 1) {
+                        showLocationDetails(cluster.locations[0]);
+                    } else {
+                        const bounds = new mapboxgl.LngLatBounds();
+                        cluster.locations.forEach(loc => bounds.extend(loc.coordinates));
+                        map.fitBounds(bounds, { padding: 50 });
+                        
+                        // Show cluster info
+                        const popup = new mapboxgl.Popup({
+                            offset: 25,
+                            closeButton: false
+                        }).setHTML(`
+                            <h3>Cluster of ${count} locations</h3>
+                            <p>Zoom in to see individual locations</p>
+                            <button onclick="zoomToCluster(${cluster.center[0]}, ${cluster.center[1]})" 
+                                    style="margin-top: 10px; padding: 5px 10px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Zoom In
+                            </button>
+                        `);
+                        
+                        marker.setPopup(popup);
+                    }
+                });
+                
+                cluster.marker = marker;
+            });
+        }
+        
+        window.zoomToCluster = function(lon, lat) {
+            map.flyTo({
+                center: [lon, lat],
+                zoom: map.getZoom() + 2,
+                essential: true
+            });
+        };
+        
+        function showLocationDetails(location) {
+            const detailsPanel = document.getElementById('details-panel');
+            const detailsContent = document.getElementById('details-content');
+            
+            // Create HTML for location details
+            let html = `
+                <div class="location-info">
+                    <h4>📍 ${location.locationName}</h4>
+                    <p><strong>Report ID:</strong> ${location.id}</p>
+                    <p><strong>Address:</strong> ${location.address}</p>
+                    <p><strong>Date:</strong> ${location.date}</p>
+                    <p><strong>Coordinates:</strong> ${location.coordinates[1].toFixed(6)}°, ${location.coordinates[0].toFixed(6)}°</p>
+                </div>
+            `;
+            
+            // Add all data fields
+            html += '<div style="margin-top: 20px;"><h4 style="margin-bottom: 10px;">All Data Fields:</h4>';
+            html += '<div style="background: #f8f9fa; border-radius: 6px; padding: 15px; font-size: 13px;">';
+            
+            location.headers.forEach((header, index) => {
+                if (location.rawData[index]) {
+                    html += `<p style="margin: 5px 0;"><strong>${header}:</strong> ${location.rawData[index]}</p>`;
+                }
+            });
+            
+            html += '</div></div>';
+            
+            detailsContent.innerHTML = html;
+            detailsPanel.style.display = 'block';
+            
+            // Fly to location
+            map.flyTo({
+                center: location.coordinates,
+                zoom: 15,
+                essential: true
+            });
+        }
+        
+        function closeDetails() {
+            document.getElementById('details-panel').style.display = 'none';
+        }
+        
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data?')) {
+                clearMapData();
+                allLocations = [];
+                updateStats(0, 0, 0);
+                document.getElementById('clear-data').disabled = true;
+                document.getElementById('fit-bounds').disabled = true;
+                closeDetails();
+                showMessage('All data cleared');
+            }
+        }
+        
+        function clearMapData() {
+            markers.forEach(marker => marker.remove());
+            markers = [];
+            clusters = [];
+        }
+        
+        function toggleClusters() {
+            useClustering = !useClustering;
+            const button = document.getElementById('toggle-clusters');
+            button.textContent = useClustering ? 'Disable Clustering' : 'Enable Clustering';
+            
+            if (allLocations.length > 0) {
+                plotLocations(allLocations);
+                showMessage(`Clustering ${useClustering ? 'enabled' : 'disabled'}`);
+            }
+        }
+        
+        function fitToBounds() {
+            if (allLocations.length === 0) return;
+            
+            const bounds = new mapboxgl.LngLatBounds();
+            allLocations.forEach(location => {
+                bounds.extend(location.coordinates);
+            });
+            
+            map.fitBounds(bounds, {
+                padding: 50,
+                maxZoom: 10
+            });
+        }
+        
+        function updateStats(total, withCoords, loaded) {
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('coords-count').textContent = withCoords;
+            document.getElementById('loaded-count').textContent = loaded;
+        }
+        
+        function enableControls() {
+            document.getElementById('clear-data').disabled = false;
+            document.getElementById('fit-bounds').disabled = false;
+        }
+        
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+        
+        function showMessage(message) {
+            // Create a temporary notification
+            const notification = document.createElement('div');
+            notification.style.position = 'absolute';
+            notification.style.top = '100px';
+            notification.style.right = '20px';
+            notification.style.background = '#0066cc';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 15px';
+            notification.style.borderRadius = '6px';
+            notification.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '1000';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
