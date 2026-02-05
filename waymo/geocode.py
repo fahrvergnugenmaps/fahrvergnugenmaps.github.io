@@ -9,12 +9,32 @@ INPUT_CSV = 'input.csv'  # Your CSV file
 OUTPUT_CSV = 'geocoded_output.csv'
 MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoidG9tYXNubjk4IiwiYSI6ImNseHI3aHdzaTBqYmcyanEzaWJzdTdxcDYifQ.nljzyejSeSv3BpHyEi9x0w'  # Replace with your Mapbox token
 
-def geocode_address(address, zip_code, token):
+def geocode_address(address, zip_code, location, token):
     """
     Geocode a single address using Mapbox Geocoding API
     """
-    # Construct query - combine address with zip code for better accuracy
-    query = f"{address}, {zip_code}"
+    # NEW: Combine address with location column if available
+    # Prioritize location column, fall back to address
+    if pd.notna(location) and str(location).strip():
+        # Use location column as primary query
+        query = str(location).strip()
+        # Optionally append zip code for better accuracy
+        if pd.notna(zip_code) and str(zip_code).strip():
+            query = f"{query}, {str(int(zip_code))}"
+    elif pd.notna(address) and str(address).strip():
+        # Fall back to address column
+        query = str(address).strip()
+        if pd.notna(zip_code) and str(zip_code).strip():
+            query = f"{query}, {str(int(zip_code))}"
+    else:
+        return {
+            'longitude': None,
+            'latitude': None,
+            'place_name': None,
+            'relevance': None,
+            'accuracy': None,
+            'full_response': None
+        }
     
     # URL encode the query
     import urllib.parse
@@ -27,7 +47,7 @@ def geocode_address(address, zip_code, token):
         'access_token': token,
         'limit': 1,  # Get only the best result
         'country': 'US',  # Limit to US addresses
-        'types': 'address,poi'  # Prioritize address and point of interest results
+        'types': 'address,poi,place'  # Prioritize address, point of interest, and place results
     }
     
     try:
@@ -45,7 +65,8 @@ def geocode_address(address, zip_code, token):
                 'place_name': feature['place_name'],
                 'relevance': feature['relevance'],
                 'accuracy': feature.get('properties', {}).get('accuracy', 'unknown'),
-                'full_response': json.dumps(feature)  # Store full response for debugging
+                'full_response': json.dumps(feature),  # Store full response for debugging
+                'query_used': query  # NEW: Track which query was used
             }
         else:
             return {
@@ -54,18 +75,20 @@ def geocode_address(address, zip_code, token):
                 'place_name': None,
                 'relevance': None,
                 'accuracy': None,
-                'full_response': None
+                'full_response': None,
+                'query_used': query  # NEW: Track which query was used
             }
             
     except requests.exceptions.RequestException as e:
-        print(f"Error geocoding '{address}, {zip_code}': {e}")
+        print(f"Error geocoding '{query}': {e}")
         return {
             'longitude': None,
             'latitude': None,
             'place_name': None,
             'relevance': None,
             'accuracy': None,
-            'full_response': None
+            'full_response': None,
+            'query_used': query  # NEW: Track which query was used
         }
 
 def main():
@@ -75,6 +98,22 @@ def main():
     
     print(f"Found {len(df)} records to geocode")
     
+    # NEW: Check if location column exists
+    location_col = None
+    possible_location_cols = ['Location', 'location', 'loc', 'LOCATION']
+    
+    for col in possible_location_cols:
+        if col in df.columns:
+            location_col = col
+            print(f"Found location column: '{location_col}'")
+            break
+    
+    if location_col is None:
+        print("Warning: No location column found. Will use address column only.")
+        # Add empty location column to avoid errors
+        df['Location'] = None
+        location_col = 'Location'
+    
     # Add new columns for geocoding results
     df['longitude'] = None
     df['latitude'] = None
@@ -82,6 +121,7 @@ def main():
     df['geocode_relevance'] = None
     df['geocode_accuracy'] = None
     df['geocode_full_response'] = None
+    df['geocode_query_used'] = None  # NEW: Track which query was used
     
     # Geocode each address
     successful = 0
@@ -90,16 +130,31 @@ def main():
     for idx, row in df.iterrows():
         address = row['Location Address / Description']
         zip_code = row['Zip Code']
+        location = row[location_col]  # NEW: Get location column value
         
-        if pd.isna(address) or pd.isna(zip_code):
-            print(f"Row {idx}: Missing address or zip code")
+        if pd.isna(address) and pd.isna(location):
+            print(f"Row {idx}: Missing both address and location")
             failed += 1
             continue
         
-        print(f"Geocoding {idx+1}/{len(df)}: {address}, {zip_code}")
+        # Determine which field(s) to show in log
+        log_info = []
+        if pd.notna(location):
+            log_info.append(f"Location: {location}")
+        if pd.notna(address):
+            log_info.append(f"Address: {address}")
+        if pd.notna(zip_code):
+            log_info.append(f"ZIP: {zip_code}")
         
-        # Geocode the address
-        result = geocode_address(str(address), str(int(zip_code)), MAPBOX_ACCESS_TOKEN)
+        print(f"Geocoding {idx+1}/{len(df)}: {', '.join(log_info)}")
+        
+        # Geocode the address/location
+        result = geocode_address(
+            str(address) if pd.notna(address) else None,
+            str(int(zip_code)) if pd.notna(zip_code) else None,
+            location,
+            MAPBOX_ACCESS_TOKEN
+        )
         
         # Update the dataframe
         df.at[idx, 'longitude'] = result['longitude']
@@ -108,13 +163,18 @@ def main():
         df.at[idx, 'geocode_relevance'] = result['relevance']
         df.at[idx, 'geocode_accuracy'] = result['accuracy']
         df.at[idx, 'geocode_full_response'] = result['full_response']
+        df.at[idx, 'geocode_query_used'] = result['query_used']  # NEW: Store query used
         
         if result['longitude'] is not None:
             successful += 1
             print(f"  ✓ Success: {result['latitude']:.4f}, {result['longitude']:.4f}")
+            if 'query_used' in result:
+                print(f"  Query used: {result['query_used']}")
         else:
             failed += 1
             print(f"  ✗ Failed to geocode")
+            if 'query_used' in result:
+                print(f"  Query attempted: {result['query_used']}")
         
         # Rate limiting - be nice to the API
         time.sleep(0.1)  # 100ms delay between requests
@@ -125,13 +185,29 @@ def main():
     print(f"Failed: {failed}")
     print(f"Success rate: {successful/len(df)*100:.1f}%")
     
+    # NEW: Show query usage statistics
+    if 'geocode_query_used' in df.columns:
+        query_sources = df['geocode_query_used'].dropna()
+        if len(query_sources) > 0:
+            location_queries = query_sources[query_sources.str.contains(r'^\s*[^,]+\s*,\s*\d{5}')].count()
+            address_queries = len(query_sources) - location_queries
+            print(f"\nQuery source statistics:")
+            print(f"  Location-based queries: {location_queries}")
+            print(f"  Address-based queries: {address_queries}")
+    
     # Save to CSV
     df.to_csv(OUTPUT_CSV, index=False)
     print(f"\nResults saved to: {OUTPUT_CSV}")
     
     # Create a summary
-    summary_df = df[['SGO Report ID', 'Location Address / Description', 'Zip Code', 
-                     'latitude', 'longitude', 'place_name', 'geocode_relevance']]
+    summary_cols = ['SGO Report ID', 'Location Address / Description', location_col, 'Zip Code', 
+                    'latitude', 'longitude', 'place_name', 'geocode_relevance']
+    
+    # Add query used column if it exists
+    if 'geocode_query_used' in df.columns:
+        summary_cols.append('geocode_query_used')
+    
+    summary_df = df[summary_cols]
     
     # Save a simplified version without the full JSON response
     simplified_csv = 'geocoded_simplified.csv'
