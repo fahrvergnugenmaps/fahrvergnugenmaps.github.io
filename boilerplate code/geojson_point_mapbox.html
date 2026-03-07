@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bay Area Bakeries Map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            pointer-events: none;
+            font-size: 14px;
+        }
+        .bakery-count {
+            font-weight: bold;
+            color: #4264fb;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>🍞 San Francisco Bay Area Bakeries</h2>
+        <p>Found <span class="bakery-count" id="count">0</span> bakeries</p>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        // MAPBOX ACCESS TOKEN - Replace with your own token
+        // Get one at: https://account.mapbox.com/access-tokens/
+        mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN_HERE';
+
+        // HARD-CODED GEOJSON DATA AS A VARIABLE
+        const bakeryData = {
+            
+        };
+
+        // Initialize the map
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [-122.4, 37.8], // San Francisco Bay Area center
+            zoom: 9
+        });
+
+        // Wait for map to load
+        map.on('load', () => {
+            // Add the GeoJSON source
+            map.addSource('bakeries', {
+                type: 'geojson',
+                data: bakeryData
+            });
+
+            // Add a circle layer for the bakeries
+            map.addLayer({
+                'id': 'bakery-points',
+                'type': 'circle',
+                'source': 'bakeries',
+                'paint': {
+                    'circle-radius': 8,
+                    'circle-color': '#4264fb',
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
+
+            // Add a symbol layer with bakery icons (optional)
+            map.addLayer({
+                'id': 'bakery-symbols',
+                'type': 'symbol',
+                'source': 'bakeries',
+                'layout': {
+                    'icon-image': 'bakery-15', // Mapbox default bakery icon
+                    'icon-size': 1.2,
+                    'icon-allow-overlap': true
+                }
+            });
+
+            // Update the bakery count
+            document.getElementById('count').textContent = bakeryData.features.length;
+
+            // Create a popup
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            // Show popup on hover
+            map.on('mouseenter', 'bakery-points', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const properties = e.features[0].properties;
+                
+                // Create popup content
+                const popupContent = `
+                    <strong>${properties.name}</strong><br>
+                    ${properties.address}<br>
+                    ${properties.city}<br>
+                    <small>${properties.type}</small><br>
+                    <small>📞 ${properties.phone}</small><br>
+                    <small>🕒 ${properties.hours}</small>
+                `;
+                
+                popup.setLngLat(coordinates)
+                    .setHTML(popupContent)
+                    .addTo(map);
+            });
+
+            map.on('mouseleave', 'bakery-points', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+            // Fit map to show all bakeries
+            const bounds = new mapboxgl.LngLatBounds();
+            bakeryData.features.forEach(feature => {
+                bounds.extend(feature.geometry.coordinates);
+            });
+            map.fitBounds(bounds, { padding: 50 });
+        });
+
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        
+        // Add geolocation control
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: { enableHighAccuracy: true },
+                trackUserLocation: true
+            }),
+            'top-right'
+        );
+    </script>
+</body>
+</html>
